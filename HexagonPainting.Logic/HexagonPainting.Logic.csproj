@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HexagonPainting.Core\HexagonPainting.Core.csproj" />
+  </ItemGroup>
+
 </Project>
