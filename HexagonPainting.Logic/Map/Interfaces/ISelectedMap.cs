@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HexagonPainting.Logic.Map;
+namespace HexagonPainting.Logic.Map.Interfaces;
 
 public interface ISelectedMap<TColor>
 {
