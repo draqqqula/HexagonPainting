@@ -4,13 +4,13 @@ using HexagonPainting.Logic.Map.Base;
 
 namespace HexagonPainting.Logic.Map;
 
-public class QRCoordinateBasedHexagonMap : HexagonBitMapBase
+public class RectangleShapedHexagonBitMap : HexagonBitMapBase
 {
     private readonly int _minQ;
     private readonly int _maxQ;
     private readonly int _minR;
     private readonly int _maxR;
-    public QRCoordinateBasedHexagonMap(BitArray data, int minQ, int minR, int maxQ, int maxR) : base(data)
+    public RectangleShapedHexagonBitMap(BitArray data, int minQ, int minR, int maxQ, int maxR) : base(data)
     {
         _minQ = minQ;
         _maxQ = maxQ;

@@ -1,4 +1,5 @@
 ﻿using HexagonPainting.Core.Map.Interfaces;
+using HexagonPainting.Logic.Drawing.Colors;
 using HexagonPainting.Logic.Map;
 using HexagonPainting.Logic.Map.Base;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,8 +10,8 @@ public static class StartUp
 {
     public static void AddLogic(this IServiceCollection services)
     {
-        services.AddTransient<QRCoordinateBasedHexagonMap>();
-        services.AddTransient<HexagonBitMapBase>(provider => provider.GetRequiredService<QRCoordinateBasedHexagonMap>());
-        services.AddTransient<IHexagonMap<bool?>>(provider => provider.GetRequiredService<HexagonBitMapBase>());
+        services.AddTransient<RectangleShapedHexagonBitMap>();
+        services.AddTransient<HexagonBitMapBase>(provider => provider.GetRequiredService<RectangleShapedHexagonBitMap>());
+        services.AddTransient<IHexagonMap<BitColor>>(provider => provider.GetRequiredService<HexagonBitMapBase>());
     }
 }
