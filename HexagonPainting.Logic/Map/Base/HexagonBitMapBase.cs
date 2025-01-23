@@ -27,7 +27,7 @@ public abstract class HexagonBitMapBase : IHexagonMap<bool?>
                 yield return new TileValue<bool?>()
                 {
                     Location = location,
-                    Value = _data[i]
+                    Color = _data[i]
                 };
             }
         }

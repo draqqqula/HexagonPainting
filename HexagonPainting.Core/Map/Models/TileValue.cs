@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace HexagonPainting.Core.Map.Models;
 
-public struct TileValue<T>
+public struct TileValue<TColor>
 {
     public required GridLocation Location { get; init; }
-    public required T Value { get; init; }
+    public required TColor Color { get; init; }
 }

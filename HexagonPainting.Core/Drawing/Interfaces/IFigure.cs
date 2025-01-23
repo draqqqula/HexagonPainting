@@ -2,7 +2,7 @@
 
 namespace HexagonPainting.Core.Drawing.Interfaces;
 
-public interface IFigure<T>
+public interface IFigure<TColor>
 {
-    public void ApplyTo(IHexagonMap<T> map);
+    public void ApplyTo(IHexagonMap<TColor> map);
 }
