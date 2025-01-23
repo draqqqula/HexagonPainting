@@ -8,6 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <AvaloniaResource Include="bin\Debug\net8.0\Assets\avalonia-logo.ico" />
+    <AvaloniaResource Include="bin\Debug\net8.0\Assets\hexagon.png" />
+    <AvaloniaResource Include="bin\Debug\net8.0\Assets\hexgrid.png" />
     <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>

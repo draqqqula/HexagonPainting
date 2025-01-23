@@ -75,6 +75,16 @@ namespace HexagonPainting.Controls
             }
         }
 
+        public void DrawHexes(IEnumerable<Hex> hexes)
+        {
+            if (Vm == null)
+                return;
+            Vm.AddHex(hexes);
+
+            // Request the updated image be rendered
+            InvalidateVisual();
+        }
+
         private void PaintControl_PointerReleased(object? sender, PointerReleasedEventArgs e)
         {
             if (Vm != null)
@@ -85,7 +95,7 @@ namespace HexagonPainting.Controls
                     Vm.Dragging = false;
 
                     // Paint a new rectangle
-                    Vm.AddRectangle();
+                    Vm.AddHex(new []{new Hex(){Coordinates = new Point(100,100),Scale = 10}});
 
                     // Request the updated image be rendered
                     InvalidateVisual();
