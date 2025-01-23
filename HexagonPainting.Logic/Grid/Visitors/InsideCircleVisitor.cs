@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HexagonPainting.Logic.Grid.Visitors;
 
-public class InsideCircleVisitor : IGridVisitor<IEnumerable<GridLocation>>
+public readonly struct InsideCircleVisitor : IGridVisitor<IEnumerable<GridLocation>>
 {
     readonly struct Span
     {

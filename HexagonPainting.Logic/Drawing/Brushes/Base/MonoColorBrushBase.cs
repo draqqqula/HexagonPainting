@@ -10,27 +10,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HexagonPainting.Logic.Drawing.Brushes;
+namespace HexagonPainting.Logic.Drawing.Brushes.Base;
 
-public class BasicBrush<T, TVisitor> : IBrush<T> where TVisitor : IGridVisitor<IEnumerable<GridLocation>>
+public abstract class MonoColorBrushBase<TColor, TVisitor> : IBrush<TColor> where TVisitor : IGridVisitor<IEnumerable<GridLocation>>
 {
-    private readonly ISelectedColor<T> _selectedColor;
+    private readonly ISelectedColor<TColor> _selectedColor;
     private readonly IGrid _grid;
-    private readonly TVisitor _visitor;
 
-    public BasicBrush(ISelectedColor<T> selectedColor, IGrid grid, TVisitor visitor)
+    public MonoColorBrushBase(ISelectedColor<TColor> selectedColor, IGrid grid)
     {
         _selectedColor = selectedColor;
         _grid = grid;
-        _visitor = visitor;
     }
 
-    public IFigure<T> Draw()
+    public abstract TVisitor GetVisitor();
+
+    public IFigure<TColor> Draw()
     {
-        return new MonoColorFigure<T>()
+        var visitor = GetVisitor();
+        return new MonoColorFigure<TColor>()
         {
             Color = _selectedColor.Value,
-            Region = _grid.Accept(_visitor)
+            Region = _grid.Accept(visitor)
         };
     }
 }
