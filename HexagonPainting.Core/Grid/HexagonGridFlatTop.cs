@@ -1,6 +1,6 @@
-﻿using HexagonPainting.Core.Interfaces;
+﻿using HexagonPainting.Core.Grid.Interfaces;
 
-namespace HexagonPainting.Core.Models.Grids;
+namespace HexagonPainting.Core.Grid;
 
 public class HexagonGridFlatTop : IGrid
 {

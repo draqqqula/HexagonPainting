@@ -1,4 +1,4 @@
-﻿namespace HexagonPainting.Core.Models;
+﻿namespace HexagonPainting.Core.Common.Models;
 
 public readonly struct GridLocation
 {

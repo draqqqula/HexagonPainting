@@ -10,4 +10,8 @@
     <ProjectReference Include="..\HexagonPainting.Core\HexagonPainting.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Drawing\Новая папка\" />
+  </ItemGroup>
+
 </Project>

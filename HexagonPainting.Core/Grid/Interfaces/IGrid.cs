@@ -1,4 +1,4 @@
-﻿namespace HexagonPainting.Core.Interfaces;
+﻿namespace HexagonPainting.Core.Grid.Interfaces;
 
 public interface IGrid
 {
