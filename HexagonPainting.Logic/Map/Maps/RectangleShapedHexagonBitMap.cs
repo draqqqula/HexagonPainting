@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Reflection;
+using HexagonPainting.Core.Common.Extensions;
 using HexagonPainting.Core.Common.Models;
 using HexagonPainting.Logic.Map.Maps.Base;
 
@@ -7,28 +8,25 @@ namespace HexagonPainting.Logic.Map.Maps;
 
 public class RectangleShapedHexagonBitMap : HexagonBitMapBase
 {
-    private int _minQ;
-    private int _maxQ;
-    private int _minR;
-    private int _maxR;
-    public RectangleShapedHexagonBitMap(BitArray data, int minQ, int minR, int maxQ, int maxR) : base(data)
+    private RectRegion _rect;
+    public RectangleShapedHexagonBitMap(RectRegion rect) : base(new BitArray(rect.Area))
     {
-        _minQ = minQ;
-        _maxQ = maxQ;
-        _minR = minR;
-        _maxR = maxR;
+        _rect = rect;
     }
 
     public override void Deserialize(BinaryReader reader)
     {
-        _minQ = reader.ReadInt32();
-        _minR = reader.ReadInt32();
-        _maxQ = reader.ReadInt32();
-        _maxR = reader.ReadInt32();
+        _rect = new RectRegion()
+        {
+            MinQ = reader.ReadInt32(),
+            MinR = reader.ReadInt32(),
+            MaxQ = reader.ReadInt32(),
+            MaxR = reader.ReadInt32(),
+        };
         byte b = 0;
         var c = 0;
 
-        _data.Length = (_maxQ - _minQ) * (_maxR - _minR);
+        _data.Length = _rect.Area;
 
         for (int i = 0; i < _data.Length; i += 1)
         {
@@ -55,10 +53,10 @@ public class RectangleShapedHexagonBitMap : HexagonBitMapBase
 
     public override void Serialize(BinaryWriter writer)
     {
-        writer.Write(_minQ);
-        writer.Write(_minR);
-        writer.Write(_maxQ);
-        writer.Write(_maxR);
+        writer.Write(_rect.MinQ);
+        writer.Write(_rect.MinR);
+        writer.Write(_rect.MaxQ);
+        writer.Write(_rect.MaxR);
         byte b = 0;
         var c = 0;
 
@@ -85,38 +83,11 @@ public class RectangleShapedHexagonBitMap : HexagonBitMapBase
 
     public override bool TryGetIndex(int q, int r, out int index)
     {
-        var half = Convert.ToInt32(MathF.Floor((float)q / 2));
-        var r0 = r + half;
-        if (q < _minQ || q >= _maxQ || r0 < _minR || r0 >= _maxR)
-        {
-            index = 0;
-            return false;
-        }
-        index = (q - _minQ) * (_maxR - _minR) + r0 - _minR;
-        return true;
+        return _rect.TryGetIndex(q, r, out index);
     }
 
     public override bool TryGetLocation(int index, out GridLocation location)
     {
-        if (index < 0 || index > (_maxQ - _minQ) * (_maxR - _minR))
-        {
-            location = new GridLocation()
-            {
-                Q = 0,
-                R = 0
-            };
-            return false;
-        }
-        var lineLength = _maxR - _minR;
-        var line = Convert.ToInt32(MathF.Floor((float)index / lineLength)); ;
-        var q = _minQ + line;
-        var half = Convert.ToInt32(MathF.Floor((float)q / 2));
-        var r = -half + index & line;
-        location = new GridLocation()
-        {
-            Q = q,
-            R = r
-        };
-        return true;
+        return _rect.TryGetLocation(index, out location);
     }
 }

@@ -24,7 +24,13 @@ public static class StartUp
         services.AddBrushesFor<BitColor>();
         services.AddSelectables<BitColor>(
             BitColor.True, 
-            new RectangleShapedHexagonBitMap(new BitArray(1024), -16, -16, 16, 16));
+            new RectangleShapedHexagonBitMap(new RectRegion()
+            {
+                MinQ = -16,
+                MinR = -16,
+                MaxQ = 16,
+                MaxR = 16
+            }));
     }
 
     public static void AddCommonDefaults(this IServiceCollection services)
