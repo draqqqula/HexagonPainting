@@ -13,9 +13,9 @@ using System.Threading.Tasks;
 
 namespace HexagonPainting.Logic.Drawing.Brushes;
 
-public class PointBrush<TColor> : PointerBrushBase<TColor, TouchingRectangleVisitor>
+public class RectangleBrush<TColor> : PointerBrushBase<TColor, TouchingRectangleVisitor>
 {
-    public PointBrush(ISelectedValueProvider<TColor> selectedColor, IGrid grid, IPointer pointer) : base(selectedColor, grid, pointer)
+    public RectangleBrush(ISelectedValueProvider<TColor> selectedColor, IGrid grid, IPointer pointer) : base(selectedColor, grid, pointer)
     {
     }
 
