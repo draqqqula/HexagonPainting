@@ -1,4 +1,5 @@
-﻿using HexagonPainting.Core.Common.Models;
+﻿using HexagonPainting.Core.Common.Extensions;
+using HexagonPainting.Core.Common.Models;
 using HexagonPainting.Core.Grid;
 using HexagonPainting.Core.Grid.Interfaces;
 using System;
@@ -36,7 +37,7 @@ public readonly struct InsideCircleVisitor : IGridVisitor<IEnumerable<GridLocati
             var factor = isTopHalf ? -1 : 1;
             var y = i - factor;
             var isBlue = Math.Abs(y % 2) != 0;
-            var mapY = Convert.ToInt32(BooleanRound((float)(y - factor) / 3, !isTopHalf)) + factor;
+            var mapY = Convert.ToInt32(MathExtensions.BooleanRound((float)(y - factor) / 3, !isTopHalf)) + factor;
 
             var side = GetHorizontalSpan(Position, grid.QuarterHeight, grid.HalfWidth, y, Radius, mapY, isBlue);
             var pointy = GetHorizontalSpan(Position, grid.QuarterHeight, grid.HalfWidth, y - factor, Radius, mapY, !isBlue);
@@ -53,8 +54,8 @@ public readonly struct InsideCircleVisitor : IGridVisitor<IEnumerable<GridLocati
     {
         var factor = down ? 1 : -1;
         var top = y - radius * factor;
-        var tileY = BooleanRound(top / segmentLength, down);
-        var topVertexY = BooleanRound((tileY - factor) / 3, down) + factor;
+        var tileY = MathExtensions.BooleanRound(top / segmentLength, down);
+        var topVertexY = MathExtensions.BooleanRound((tileY - factor) / 3, down) + factor;
         var topCornerTile = topVertexY * 3 + 2 * factor;
         return topCornerTile;
     }
@@ -66,22 +67,12 @@ public readonly struct InsideCircleVisitor : IGridVisitor<IEnumerable<GridLocati
         var sideLeftCorner = MathF.Ceiling((sideX - (isBlue ? segmentWidth : 0)) / (segmentWidth * 2)) * segmentWidth * 2 + (isBlue ? segmentWidth : 0);
         var sideSlice = MathF.Floor(((position.X - sideX) * 2 - sideLeftCorner + sideX) / (segmentWidth * 2));
 
-        var sideMapX = GetSegment(sideLeftCorner, 1 / (segmentWidth * 2), segmentWidth - mapY * segmentWidth);
+        var sideMapX = MathExtensions.GetSegment(sideLeftCorner, 1 / (segmentWidth * 2), segmentWidth - mapY * segmentWidth);
 
         return new Span()
         {
             Start = sideMapX,
             Count = sideSlice
         };
-    }
-
-    private static int GetSegment(float x, float factor, float offset)
-    {
-        return Convert.ToInt32(MathF.Floor((x + offset) * factor));
-    }
-
-    private static float BooleanRound(float number, bool down)
-    {
-        return down ? MathF.Floor(number) : MathF.Ceiling(number);
     }
 }
