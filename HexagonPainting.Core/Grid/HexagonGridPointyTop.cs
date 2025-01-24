@@ -8,11 +8,21 @@ public class HexagonGridPointyTop : IGrid
     {
         HalfWidth = inscribedRadius;
         CellSide = HalfWidth * 2 / MathF.Sqrt(3);
-        QuarterHeight = (CellSide * 2 - CellSide) / 2;
+        HalfHeight = CellSide * 2 - CellSide;
+        QuarterHeight = HalfHeight / 2;
+        QuarterWidth = HalfWidth / 2;
+        Width = HalfWidth * 2;
+        Height = HalfHeight * 2;
     }
-    public float HalfWidth { get; private init; }
     public float CellSide { get; private init; }
+
+    public float QuarterWidth { get; private init; }
+    public float HalfWidth { get; private init; }
+    public float Width { get; private init; }
+
     public float QuarterHeight { get; private init; }
+    public float HalfHeight { get; private init; }
+    public float Height { get; private init; }
 
     public TResult Accept<TResult>(IGridVisitor<TResult> visitor)
     {
