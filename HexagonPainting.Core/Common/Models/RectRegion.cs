@@ -12,4 +12,5 @@ public struct RectRegion
     public required int MaxQ { get; init; }
     public required int MinR { get; init; }
     public required int MaxR { get; init; }
+    public int Area => (MaxQ - MinQ) * (MaxR - MinR);
 }

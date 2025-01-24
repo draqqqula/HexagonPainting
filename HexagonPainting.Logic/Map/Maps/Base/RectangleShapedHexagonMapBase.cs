@@ -31,6 +31,25 @@ public class RectangleShapedHexagonMapBase : HexagonMapBase
 
     public override bool TryGetLocation(int index, out GridLocation location)
     {
-        throw new NotImplementedException();
+        if (index < 0 || index > Rect.Area)
+        {
+            location = new GridLocation()
+            { 
+                Q = 0, 
+                R = 0 
+            };
+            return false;
+        }
+        var lineLength = Rect.MaxR - Rect.MinR;
+        var line = Convert.ToInt32(MathF.Floor((float)index / lineLength)); ;
+        var q = Rect.MinQ + line;
+        var half = Convert.ToInt32(MathF.Floor((float)q / 2));
+        var r = -half + index & line;
+        location = new GridLocation()
+        {
+            Q = q,
+            R = r
+        };
+        return true;
     }
 }
