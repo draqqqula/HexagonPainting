@@ -12,10 +12,10 @@ using System.Threading.Tasks;
 
 namespace HexagonPainting.Logic.Grid.Visitors;
 
-public readonly struct TouchingRectangleVisitor : IGridVisitor<IEnumerable<GridLocation>>
+public class TouchingRectangleVisitor : IGridVisitor<IEnumerable<GridLocation>>
 {
-    public required Vector2 Position { get; init; }
-    public required Vector2 Size { get; init; }
+    public Vector2 Position { get; set; }
+    public Vector2 Size { get; set; }
 
     public IEnumerable<GridLocation> VisitFlatTop(HexagonGridFlatTop grid)
     {

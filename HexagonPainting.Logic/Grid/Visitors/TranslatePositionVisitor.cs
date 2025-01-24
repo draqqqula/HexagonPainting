@@ -13,9 +13,9 @@ using System.Threading.Tasks;
 
 namespace HexagonPainting.Logic.Grid.Visitors;
 
-public readonly struct TranslatePositionVisitor : IGridVisitor<Vector2>
+public class TranslatePositionVisitor : IGridVisitor<Vector2>
 {
-    public required GridLocation Location { get; init; }
+    public GridLocation Location { get; set; }
     public Vector2 VisitFlatTop(HexagonGridFlatTop grid)
     {
         throw new NotImplementedException();

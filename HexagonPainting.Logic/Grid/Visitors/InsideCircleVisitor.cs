@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace HexagonPainting.Logic.Grid.Visitors;
 
-public readonly struct InsideCircleVisitor : IGridVisitor<IEnumerable<GridLocation>>
+public class InsideCircleVisitor : IGridVisitor<IEnumerable<GridLocation>>
 {
     readonly struct Span
     {
@@ -19,8 +19,8 @@ public readonly struct InsideCircleVisitor : IGridVisitor<IEnumerable<GridLocati
         public required float Count { get; init; }
     }
 
-    public required Vector2 Position { get; init; }
-    public required float Radius { get; init; }
+    public Vector2 Position { get; set; }
+    public float Radius { get; set; }
     public IEnumerable<GridLocation> VisitFlatTop(HexagonGridFlatTop grid)
     {
         throw new NotImplementedException();
