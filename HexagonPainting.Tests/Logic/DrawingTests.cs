@@ -26,11 +26,11 @@ namespace HexagonPainting.Tests.Logic;
 [TestFixture]
 public class DrawingTests
 {
+    private IServiceProvider _provider;
     private IPointer _pointer;
     private Selected<BitColor> _selectedColor;
     private Selected<IBrush<BitColor>> _selectedBrush;
-    private Selected<IHexagonMap<BitColor>> _selectedMap;
-    private DrawingController<BitColor> _drawingController;
+    private Layer<BitColor> _mainLayer;
 
 
     [SetUp]
@@ -44,22 +44,24 @@ public class DrawingTests
         services.AddSingleton(_pointer);
         services.AddLogic();
 
-        var provider = factory.CreateServiceProvider(services);
+        _provider = factory.CreateServiceProvider(services);
 
-        _selectedColor = provider.GetRequiredService<Selected<BitColor>>();
-        _selectedBrush = provider.GetRequiredService<Selected<IBrush<BitColor>>>();
-        _selectedMap = provider.GetRequiredService<Selected<IHexagonMap<BitColor>>>();
-        _drawingController = provider.GetRequiredService<DrawingController<BitColor>>();
+        _selectedColor = _provider.GetRequiredService<Selected<BitColor>>();
+        _selectedBrush = _provider.GetRequiredService<Selected<IBrush<BitColor>>>();
+        _mainLayer = _provider.GetRequiredKeyedService<Layer<BitColor>>("main");
     }
 
     [TestCase(0, 0, 0f, 0f, true)]
     [TestCase(1, 1, 0f, 0f, true)]
     [TestCase(1, 1, 10f, 10f, true)]
     [TestCase(0, 0, 10f, 10f, false)]
-    public void TileIsPainted(int q, int r, float x, float y, bool shouldBeTrue)
+    public void CircleBrushTest(int q, int r, float x, float y, bool shouldBeTrue)
     {
+        var brush = _provider.GetRequiredService<CircleBrush<BitColor>>();
+        _selectedBrush.Value = brush;
+
         A.CallTo(() => _pointer.GetPosition()).Returns(new Vector2(x, y));
-        _drawingController.Draw();
+        _mainLayer.Draw();
         var location = new GridLocation()
         {
             Q = q,
@@ -67,11 +69,11 @@ public class DrawingTests
         };
         if (shouldBeTrue)
         {
-            Assert.That(_selectedMap.Value[location] == BitColor.True);
+            Assert.That(_mainLayer.Map[location] == BitColor.True);
         }
         else
         {
-            Assert.That(_selectedMap.Value[location] == BitColor.False);
+            Assert.That(_mainLayer.Map[location] == BitColor.False);
         }
     }
 }

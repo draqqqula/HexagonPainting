@@ -48,11 +48,11 @@ public static class StartUp
         services.AddSingleton<IHexagonMap<TColor>>(defaultMap);
         services.AddSingleton<Selected<TColor>>(new Selected<TColor>(defaultColor));
         services.AddSingleton<Selected<IBrush<TColor>>>();
-        services.AddSingleton<Selected<IHexagonMap<TColor>>>();
         services.AddSingleton<ISelectedValueProvider<TColor>>(it => it.GetRequiredService<Selected<TColor>>());
         services.AddSingleton<ISelectedValueProvider<IBrush<TColor>>>(it => it.GetRequiredService<Selected<IBrush<TColor>>>());
-        services.AddSingleton<ISelectedValueProvider<IHexagonMap<TColor>>>(it => it.GetRequiredService<Selected<IHexagonMap<TColor>>>());
-        services.AddSingleton<DrawingController<TColor>>();
+        services.AddTransient<Layer<TColor>>();
+        services.AddKeyedSingleton<Layer<TColor>>("main");
+        services.AddKeyedSingleton<Layer<TColor>>("preview");
     }
 
     public static void AddDefaultRectangleMapFor<TColor>(this IServiceCollection services, RectRegion region)
