@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HexagonPainting.Logic\HexagonPainting.Logic.csproj" />
+    <ProjectReference Include="..\HexagonPainting\HexagonPainting.App.csproj" />
   </ItemGroup>
 
 </Project>

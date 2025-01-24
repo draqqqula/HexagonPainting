@@ -24,7 +24,7 @@ using HexagonPainting.Logic.Drawing.Api;
 namespace HexagonPainting.Tests.Logic;
 
 [TestFixture]
-public class DrawingTests
+public class BitColorDrawingTests
 {
     private IServiceProvider _provider;
     private IPointer _pointer;
