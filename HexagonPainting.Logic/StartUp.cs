@@ -22,7 +22,7 @@ public static class StartUp
         services.AddCommonDefaults();
 
         services.AddBrushesFor<BitColor>();
-        services.AddSelectables<BitColor>(
+        services.AddServicesFor<BitColor>(
             BitColor.True, 
             new RectangleShapedHexagonBitMap(new RectRegion()
             {
@@ -48,7 +48,7 @@ public static class StartUp
         services.AddTransient<IBrush<TColor>>(provider => provider.GetRequiredService<PointBrush<TColor>>());
     }
 
-    public static void AddSelectables<TColor>(this IServiceCollection services, 
+    public static void AddServicesFor<TColor>(this IServiceCollection services, 
         TColor defaultColor, IHexagonMap<TColor> defaultMap)
     {
         services.AddSingleton<IHexagonMap<TColor>>(defaultMap);
@@ -59,10 +59,5 @@ public static class StartUp
         services.AddTransient<Layer<TColor>>();
         services.AddKeyedSingleton<Layer<TColor>>("main");
         services.AddKeyedSingleton<Layer<TColor>>("preview");
-    }
-
-    public static void AddDefaultRectangleMapFor<TColor>(this IServiceCollection services, RectRegion region)
-    {
-        services.AddTransient<IHexagonMap<TColor>>();
     }
 }
