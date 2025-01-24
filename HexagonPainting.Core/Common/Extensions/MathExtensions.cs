@@ -28,7 +28,7 @@ public static class MathExtensions
             index = 0;
             return false;
         }
-        index = (q - rect.MaxQ) * (rect.MaxR - rect.MinR) + r0 - rect.MinR;
+        index = (q - rect.MinQ) * (rect.MaxR - rect.MinR) + r0 - rect.MinR;
         return true;
     }
 
