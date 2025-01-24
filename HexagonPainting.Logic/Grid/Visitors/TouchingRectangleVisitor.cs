@@ -12,17 +12,16 @@ using System.Threading.Tasks;
 
 namespace HexagonPainting.Logic.Grid.Visitors;
 
-public class TouchingRectangleVisitor : IGridVisitor<IEnumerable<GridLocation>>
+public class TouchingRectangleVisitor : PositionVisitorBase<IEnumerable<GridLocation>>
 {
-    public Vector2 Position { get; set; }
     public Vector2 Size { get; set; }
 
-    public IEnumerable<GridLocation> VisitFlatTop(HexagonGridFlatTop grid)
+    public override IEnumerable<GridLocation> VisitFlatTop(HexagonGridFlatTop grid)
     {
         throw new NotImplementedException();
     }
 
-    public IEnumerable<GridLocation> VisitPointyTop(HexagonGridPointyTop grid)
+    public override IEnumerable<GridLocation> VisitPointyTop(HexagonGridPointyTop grid)
     {
         var top = Convert.ToInt32(MathExtensions.BooleanRound((Position.Y - grid.QuarterHeight * 2) / (grid.QuarterHeight * 3), false));
         var bottom = Convert.ToInt32(MathExtensions.BooleanRound((Position.Y + Size.Y + grid.QuarterHeight * 2) / (grid.QuarterHeight * 3), true));

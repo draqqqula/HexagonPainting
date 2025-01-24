@@ -11,22 +11,20 @@ using System.Threading.Tasks;
 
 namespace HexagonPainting.Logic.Grid.Visitors;
 
-public class InsideCircleVisitor : IGridVisitor<IEnumerable<GridLocation>>
+public class InsideCircleVisitor : PositionVisitorBase<IEnumerable<GridLocation>>
 {
     readonly struct Span
     {
         public required int Start { get; init; }
         public required float Count { get; init; }
     }
-
-    public Vector2 Position { get; set; }
     public float Radius { get; set; }
-    public IEnumerable<GridLocation> VisitFlatTop(HexagonGridFlatTop grid)
+    public override IEnumerable<GridLocation> VisitFlatTop(HexagonGridFlatTop grid)
     {
         throw new NotImplementedException();
     }
 
-    public IEnumerable<GridLocation> VisitPointyTop(HexagonGridPointyTop grid)
+    public override IEnumerable<GridLocation> VisitPointyTop(HexagonGridPointyTop grid)
     {
         var topCornerTile = GetPole(Position.Y, Radius, true, grid.QuarterHeight);
         var bottomCornerTile = GetPole(Position.Y, Radius, false, grid.QuarterHeight);

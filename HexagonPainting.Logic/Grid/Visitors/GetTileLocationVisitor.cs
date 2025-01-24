@@ -11,16 +11,14 @@ using System.Threading.Tasks;
 
 namespace HexagonPainting.Logic.Grid.Visitors;
 
-public class GetTileLocationVisitor : IGridVisitor<GridLocation>
+public class GetTileLocationVisitor : PositionVisitorBase<GridLocation>
 {
-    public Vector2 Position { get; set; }
-
-    public GridLocation VisitFlatTop(HexagonGridFlatTop grid)
+    public override GridLocation VisitFlatTop(HexagonGridFlatTop grid)
     {
         throw new NotImplementedException();
     }
 
-    public GridLocation VisitPointyTop(HexagonGridPointyTop grid)
+    public override GridLocation VisitPointyTop(HexagonGridPointyTop grid)
     {
         var virtualX = Position.X;
         var virtualY = Position.Y;
