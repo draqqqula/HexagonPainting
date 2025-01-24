@@ -13,26 +13,25 @@ using System.Threading.Tasks;
 
 namespace HexagonPainting.Logic.Drawing.Brushes.Base;
 
-public abstract class MonoColorBrushBase<TColor, TVisitor> : IBrush<TColor> where TVisitor : IGridVisitor<IEnumerable<GridLocation>>
+public abstract class MonoColorBrushBase<TColor> : IBrush<TColor>
 {
     private readonly ISelectedValueProvider<TColor> _selectedColor;
-    private readonly IGrid _grid;
 
     public MonoColorBrushBase(ISelectedValueProvider<TColor> selectedColor, IGrid grid)
     {
         _selectedColor = selectedColor;
-        _grid = grid;
+        Grid = grid;
     }
-
-    public abstract TVisitor GetVisitor();
+    public TColor Color => _selectedColor.Value;
+    public IGrid Grid { get; protected init; }
+    public abstract IEnumerable<GridLocation> GetTiles();
 
     public IFigure<TColor> Draw()
     {
-        var visitor = GetVisitor();
         return new MonoColorFigure<TColor>()
         {
-            Color = _selectedColor.Value,
-            Region = _grid.Accept(visitor)
+            Color = Color,
+            Region = GetTiles()
         };
     }
 }
