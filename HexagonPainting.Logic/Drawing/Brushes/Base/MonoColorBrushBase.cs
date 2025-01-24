@@ -22,8 +22,8 @@ public abstract class MonoColorBrushBase<TColor> : IBrush<TColor>
         _selectedColor = selectedColor;
         Grid = grid;
     }
-    public TColor Color => _selectedColor.Value;
-    public IGrid Grid { get; protected init; }
+    protected TColor Color => _selectedColor.Value;
+    protected IGrid Grid { get; private init; }
     public abstract IEnumerable<GridLocation> GetTiles();
 
     public IFigure<TColor> Draw()

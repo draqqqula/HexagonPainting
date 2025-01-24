@@ -13,22 +13,17 @@ using System.Threading.Tasks;
 
 namespace HexagonPainting.Logic.Drawing.Brushes;
 
-public class PointBrush<TColor> : MonoColorBrushBase<TColor>
+public class PointBrush<TColor> : PointerBrushBase<TColor, TouchingRectangleVisitor>
 {
-    private readonly IPointer _pointer;
-    private readonly TouchingRectangleVisitor _visitor;
-    public PointBrush(ISelectedValueProvider<TColor> selectedColor, IGrid grid, IPointer pointer) : base(selectedColor, grid)
+    public PointBrush(ISelectedValueProvider<TColor> selectedColor, IGrid grid, IPointer pointer) : base(selectedColor, grid, pointer)
     {
-        _pointer = pointer;
-        _visitor = new TouchingRectangleVisitor();
     }
 
     public Vector2 Size { get; set; } = Vector2.One;
 
     public override IEnumerable<GridLocation> GetTiles()
     {
-        _visitor.Position = _pointer.GetPosition();
-        _visitor.Size = Size;
-        return Grid.Accept(_visitor);
+        Visitor.Size = Size;
+        return base.GetTiles();
     }
 }
