@@ -34,9 +34,12 @@ public static class StartUp
 
     public static void AddBrushesFor<TColor>(this IServiceCollection services)
     {
-        services.AddTransient<IBrush<TColor>, CircleBrush<TColor>>();
-        services.AddTransient<IBrush<TColor>, RectangleBrush<TColor>>();
-        services.AddTransient<IBrush<TColor>, PointBrush<TColor>>();
+        services.AddTransient<CircleBrush<TColor>>();
+        services.AddTransient<RectangleBrush<TColor>>();
+        services.AddTransient<PointBrush<TColor>>();
+        services.AddTransient<IBrush<TColor>>(provider => provider.GetRequiredService<CircleBrush<TColor>>());
+        services.AddTransient<IBrush<TColor>>(provider => provider.GetRequiredService<RectangleBrush<TColor>>());
+        services.AddTransient<IBrush<TColor>>(provider => provider.GetRequiredService<PointBrush<TColor>>());
     }
 
     public static void AddSelectables<TColor>(this IServiceCollection services, 

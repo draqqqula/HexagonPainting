@@ -19,8 +19,8 @@ public class PointerBrushBase<TColor, TVisitor> : MonoColorBrushBase<TColor> whe
         Pointer = pointer;
         Visitor = new TVisitor();
     }
-    public IPointer Pointer { get; private set; }
-    public TVisitor Visitor { get; private set; }
+    protected IPointer Pointer { get; private set; }
+    protected TVisitor Visitor { get; private set; }
 
     public override IEnumerable<GridLocation> GetTiles()
     {

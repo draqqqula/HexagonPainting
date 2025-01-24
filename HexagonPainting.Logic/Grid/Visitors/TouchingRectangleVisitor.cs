@@ -2,6 +2,7 @@
 using HexagonPainting.Core.Common.Models;
 using HexagonPainting.Core.Grid;
 using HexagonPainting.Core.Grid.Interfaces;
+using HexagonPainting.Logic.Grid.Visitors.Base;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
