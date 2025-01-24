@@ -4,11 +4,11 @@ using HexagonPainting.Core.Map.Models;
 using HexagonPainting.Logic.Drawing.Colors;
 using System.Collections;
 
-namespace HexagonPainting.Logic.Map.Base;
+namespace HexagonPainting.Logic.Map.Maps.Base;
 
 public abstract class HexagonBitMapBase : IHexagonMap<BitColor>
 {
-    private readonly BitArray _data;
+    protected readonly BitArray _data;
 
     public HexagonBitMapBase(BitArray data)
     {
@@ -38,6 +38,10 @@ public abstract class HexagonBitMapBase : IHexagonMap<BitColor>
     {
         return GetEnumerator();
     }
+
+    public abstract void Serialize(BinaryWriter writer);
+
+    public abstract void Deserialize(BinaryReader reader);
 
     private bool? this[int q, int r]
     {

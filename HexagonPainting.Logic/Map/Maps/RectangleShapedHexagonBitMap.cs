@@ -1,8 +1,9 @@
 ﻿using System.Collections;
+using System.Reflection;
 using HexagonPainting.Core.Common.Models;
-using HexagonPainting.Logic.Map.Base;
+using HexagonPainting.Logic.Map.Maps.Base;
 
-namespace HexagonPainting.Logic.Map;
+namespace HexagonPainting.Logic.Map.Maps;
 
 public class RectangleShapedHexagonBitMap : HexagonBitMapBase
 {
@@ -16,6 +17,41 @@ public class RectangleShapedHexagonBitMap : HexagonBitMapBase
         _maxQ = maxQ;
         _minR = minR;
         _maxR = maxR;
+    }
+
+    public override void Deserialize(BinaryReader reader)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void Serialize(BinaryWriter writer)
+    {
+        writer.Write(_minQ);
+        writer.Write(_minR);
+        writer.Write(_maxQ);
+        writer.Write(_maxR);
+        byte b = 0;
+        var c = 0;
+
+        for (int i = 0; i < _data.Length; i += 1)
+        {
+
+            if (_data[i])
+            {
+                b += Convert.ToByte(Math.Pow(2, c));
+            }
+            c += 1;
+            if (c >= 8)
+            {
+                writer.Write(b);
+                c = 0;
+                b = 0;
+            }
+        }
+        if (c != 0)
+        {
+            writer.Write(b);
+        }
     }
 
     public override bool TryGetIndex(int q, int r, out int index)

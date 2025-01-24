@@ -1,6 +1,7 @@
 ﻿using HexagonPainting.Core.Common.Models;
 using HexagonPainting.Core.Drawing.Interfaces;
 using HexagonPainting.Core.Grid.Interfaces;
+using HexagonPainting.Logic.Common;
 using HexagonPainting.Logic.Drawing.Figure;
 using HexagonPainting.Logic.Drawing.Interfaces;
 using HexagonPainting.Logic.Grid.Visitors;
@@ -14,10 +15,10 @@ namespace HexagonPainting.Logic.Drawing.Brushes.Base;
 
 public abstract class MonoColorBrushBase<TColor, TVisitor> : IBrush<TColor> where TVisitor : IGridVisitor<IEnumerable<GridLocation>>
 {
-    private readonly ISelectedColor<TColor> _selectedColor;
+    private readonly ISelectedValueProvider<TColor> _selectedColor;
     private readonly IGrid _grid;
 
-    public MonoColorBrushBase(ISelectedColor<TColor> selectedColor, IGrid grid)
+    public MonoColorBrushBase(ISelectedValueProvider<TColor> selectedColor, IGrid grid)
     {
         _selectedColor = selectedColor;
         _grid = grid;
