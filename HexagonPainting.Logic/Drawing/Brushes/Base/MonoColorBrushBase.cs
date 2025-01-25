@@ -1,6 +1,7 @@
 ﻿using HexagonPainting.Core.Common.Models;
 using HexagonPainting.Core.Drawing.Interfaces;
 using HexagonPainting.Core.Grid.Interfaces;
+using HexagonPainting.Logic.Common;
 using HexagonPainting.Logic.Drawing.Figure;
 using HexagonPainting.Logic.Drawing.Interfaces;
 using HexagonPainting.Logic.Grid.Visitors;
@@ -12,26 +13,25 @@ using System.Threading.Tasks;
 
 namespace HexagonPainting.Logic.Drawing.Brushes.Base;
 
-public abstract class MonoColorBrushBase<TColor, TVisitor> : IBrush<TColor> where TVisitor : IGridVisitor<IEnumerable<GridLocation>>
+public abstract class MonoColorBrushBase<TColor> : IBrush<TColor>
 {
-    private readonly ISelectedColor<TColor> _selectedColor;
-    private readonly IGrid _grid;
+    private readonly ISelectedValueProvider<TColor> _selectedColor;
 
-    public MonoColorBrushBase(ISelectedColor<TColor> selectedColor, IGrid grid)
+    public MonoColorBrushBase(ISelectedValueProvider<TColor> selectedColor, IGrid grid)
     {
         _selectedColor = selectedColor;
-        _grid = grid;
+        Grid = grid;
     }
-
-    public abstract TVisitor GetVisitor();
+    protected TColor Color => _selectedColor.Value;
+    protected IGrid Grid { get; private init; }
+    public abstract IEnumerable<GridLocation> GetTiles();
 
     public IFigure<TColor> Draw()
     {
-        var visitor = GetVisitor();
         return new MonoColorFigure<TColor>()
         {
-            Color = _selectedColor.Value,
-            Region = _grid.Accept(visitor)
+            Color = Color,
+            Region = GetTiles()
         };
     }
 }

@@ -1,13 +1,14 @@
 ﻿using HexagonPainting.Core.Common.Models;
 using HexagonPainting.Core.Map.Interfaces;
 using HexagonPainting.Core.Map.Models;
+using HexagonPainting.Logic.Drawing.Colors;
 using System.Collections;
 
-namespace HexagonPainting.Logic.Map.Base;
+namespace HexagonPainting.Logic.Map.Maps.Base;
 
-public abstract class HexagonBitMapBase : IHexagonMap<bool?>
+public abstract class HexagonBitMapBase : IHexagonMap<BitColor>
 {
-    private readonly BitArray _data;
+    protected readonly BitArray _data;
 
     public HexagonBitMapBase(BitArray data)
     {
@@ -18,16 +19,16 @@ public abstract class HexagonBitMapBase : IHexagonMap<bool?>
 
     public abstract bool TryGetLocation(int index, out GridLocation location);
 
-    public IEnumerator<TileValue<bool?>> GetEnumerator()
+    public IEnumerator<TileValue<BitColor>> GetEnumerator()
     {
         for (int i = 0; i < _data.Length; i++)
         {
             if (TryGetLocation(i, out GridLocation location))
             {
-                yield return new TileValue<bool?>()
+                yield return new TileValue<BitColor>()
                 {
                     Location = location,
-                    Value = _data[i]
+                    Color = BitColorHelper.FromBoolean(_data[i])
                 };
             }
         }
@@ -37,6 +38,10 @@ public abstract class HexagonBitMapBase : IHexagonMap<bool?>
     {
         return GetEnumerator();
     }
+
+    public abstract void Serialize(BinaryWriter writer);
+
+    public abstract void Deserialize(BinaryReader reader);
 
     private bool? this[int q, int r]
     {
@@ -57,15 +62,15 @@ public abstract class HexagonBitMapBase : IHexagonMap<bool?>
         }
     }
 
-    public bool? this[GridLocation location]
+    public BitColor this[GridLocation location]
     {
         get
         {
-            return this[location.Q, location.R];
+            return BitColorHelper.FromNullableBoolean(this[location.Q, location.R]);
         }
         set
         {
-            this[location.Q, location.R] = value;
+            this[location.Q, location.R] = value.IsTrue();
         }
     }
 }

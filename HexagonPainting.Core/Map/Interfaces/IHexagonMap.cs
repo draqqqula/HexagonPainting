@@ -3,7 +3,9 @@ using HexagonPainting.Core.Map.Models;
 
 namespace HexagonPainting.Core.Map.Interfaces;
 
-public interface IHexagonMap<TValue> : IEnumerable<TileValue<TValue>>
+public interface IHexagonMap<TColor> : IEnumerable<TileValue<TColor>>
 {
-    TValue this[GridLocation position] { get; set; }
+    public TColor this[GridLocation position] { get; set; }
+    public void Serialize(BinaryWriter writer);
+    public void Deserialize(BinaryReader reader);
 }
