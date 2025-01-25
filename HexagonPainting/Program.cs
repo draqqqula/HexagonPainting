@@ -6,6 +6,7 @@ using HexagonPainting.Core.Common.Models;
 using HexagonPainting.Core.Map.Interfaces;
 using HexagonPainting.Logic.Map.Maps;
 using HexagonPainting_ViewModels;
+using HexagonPainting_ViewModels.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 

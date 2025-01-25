@@ -8,6 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Media.Immutable;
+using HexagonPainting_ViewModels;
+using HexagonPainting_ViewModels.Services;
+using Microsoft.Extensions.DependencyInjection;
+using HexagonPainting.Logic.Drawing.Api;
 
 namespace HexagonPainting.ViewModels
 {
@@ -82,7 +86,7 @@ namespace HexagonPainting.ViewModels
                 RenderTargetBitmap newImage = new RenderTargetBitmap(_image.PixelSize, _image.Dpi);
                 using (var context = newImage.CreateDrawingContext())
                 {
-                    context.DrawImage(_image, new Rect(0, 0, _image.PixelSize.Width, _image.PixelSize.Height));
+                    //context.DrawImage(_image, new Rect(0, 0, _image.PixelSize.Width, _image.PixelSize.Height));
 
                     foreach (var hex in hexes)
                     {
@@ -114,7 +118,7 @@ namespace HexagonPainting.ViewModels
 
         private Point GetHexCorner(Point center, double scale, int corner)
         {
-            double angleDeg = 60 * corner;
+            double angleDeg = 60 * corner + 30;
             double angleRad = Math.PI / 180 * angleDeg;
             return new Point(center.X + scale * Math.Cos(angleRad), center.Y + scale * Math.Sin(angleRad));
         }

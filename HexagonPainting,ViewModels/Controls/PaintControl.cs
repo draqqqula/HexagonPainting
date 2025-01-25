@@ -13,6 +13,7 @@ using HexagonPainting.Logic.Drawing.Api;
 using Pointer = HexagonPainting.Logic.Drawing.Api.Pointer;
 using Microsoft.Extensions.DependencyInjection;
 using HexagonPainting_ViewModels;
+using HexagonPainting_ViewModels.Services;
 
 namespace HexagonPainting.Controls
 {
@@ -37,6 +38,8 @@ namespace HexagonPainting.Controls
 
             KeyDownEvent.AddClassHandler<TopLevel>(PaintControl_KeyDown, handledEventsToo: true);
             KeyUpEvent.AddClassHandler<TopLevel>(PaintControl_KeyUp, handledEventsToo: true);
+
+            _mainLayer.OnMapStateChanged += InvalidateVisual;
         }
 
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -198,6 +201,8 @@ namespace HexagonPainting.Controls
         /// <param name="context"></param>
         public override void Render(DrawingContext context)
         {
+            DrawMainLayer();
+
             // If there is an image in the view model, copy it to the PaintControl's drawing surface
             if (Vm?.Image != null)
             {
@@ -213,6 +218,16 @@ namespace HexagonPainting.Controls
                 byte altColor = (byte)(255 - Vm.Green);
                 pen = new Pen(new SolidColorBrush(Color.FromRgb(altColor, altColor, altColor)), dashStyle: DashStyle.Dash);
             }
+        }
+
+        public void DrawMainLayer()
+        {
+            var hexes = _mainLayer.Select(it => new Hex()
+            {
+                Coordinates = new Point(300, 300) + new Point(it.Position.X, it.Position.Y) * 10,
+                Scale = 10f
+            });
+            Vm.AddHex(hexes);
         }
     }
 }
