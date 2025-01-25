@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Avalonia.Media.Immutable;
 
 namespace HexagonPainting.ViewModels
 {
@@ -72,6 +73,50 @@ namespace HexagonPainting.ViewModels
             }
             _image = newImage;
             OnPropertyChanged(nameof(Image));
+        }
+        public void AddHex(IEnumerable<Hex> hexes)
+        {
+            if (_image != null)
+            {
+                // Создаем новое изображение, копируем старое и добавляем шестиугольники
+                RenderTargetBitmap newImage = new RenderTargetBitmap(_image.PixelSize, _image.Dpi);
+                using (var context = newImage.CreateDrawingContext())
+                {
+                    context.DrawImage(_image, new Rect(0, 0, _image.PixelSize.Width, _image.PixelSize.Height));
+
+                    foreach (var hex in hexes)
+                    {
+                        DrawHexagon(context, hex);
+                    }
+                }
+
+                _image.Dispose();
+                _image = newImage;
+                OnPropertyChanged(nameof(Image));
+            }
+        }
+        private void DrawHexagon(DrawingContext context, Hex hex)
+        {
+            var hexPath = new PathGeometry();
+            var hexFigure = new PathFigure { StartPoint = GetHexCorner(hex.Coordinates, hex.Scale, 0) };
+
+            for (int i = 1; i < 6; i++)
+            {
+                hexFigure.Segments.Add(new LineSegment { Point = GetHexCorner(hex.Coordinates, hex.Scale, i) });
+            }
+            hexFigure.IsClosed = true;
+            hexPath.Figures.Add(hexFigure);
+
+            var pen = new Pen(new SolidColorBrush(Color.FromRgb(Red, Green, Blue)));
+            var brush = new ImmutableSolidColorBrush(new SolidColorBrush(Color.FromRgb(Red, Green, Blue)));
+            context.DrawGeometry(brush, pen, hexPath);
+        }
+
+        private Point GetHexCorner(Point center, double scale, int corner)
+        {
+            double angleDeg = 60 * corner;
+            double angleRad = Math.PI / 180 * angleDeg;
+            return new Point(center.X + scale * Math.Cos(angleRad), center.Y + scale * Math.Sin(angleRad));
         }
 
         public void AddRectangle()

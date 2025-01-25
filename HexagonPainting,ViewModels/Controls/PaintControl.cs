@@ -99,6 +99,16 @@ namespace HexagonPainting.Controls
                 }
             }
         }
+        public void DrawHexes(IEnumerable<Hex> hexes)
+        {
+            if (Vm == null)
+                return;
+            Vm.AddHex(hexes);
+
+            // Request the updated image be rendered
+            InvalidateVisual();
+        }
+        
 
         private void PaintControl_PointerCaptureLost(object? sender, PointerCaptureLostEventArgs e)
         {
