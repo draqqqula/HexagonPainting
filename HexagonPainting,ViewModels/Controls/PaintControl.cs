@@ -14,6 +14,7 @@ using Pointer = HexagonPainting.Logic.Drawing.Api.Pointer;
 using Microsoft.Extensions.DependencyInjection;
 using HexagonPainting_ViewModels;
 using HexagonPainting_ViewModels.Services;
+using HexagonPainting.Logic.Common;
 
 namespace HexagonPainting.Controls
 {
@@ -21,6 +22,7 @@ namespace HexagonPainting.Controls
     {
         private Pointer _pointer;
         private Layer<Color> _mainLayer;
+        private Selected<Color> _color;
 
         public PaintControlViewModel? Vm => DataContext as PaintControlViewModel;
 
@@ -28,7 +30,7 @@ namespace HexagonPainting.Controls
         {
             _pointer = Services.Default.GetRequiredService<Pointer>();
             _mainLayer = Services.Default.GetRequiredKeyedService<Layer<Color>>("main");
-
+            _color = Services.Default.GetRequiredService<Selected<Color>>();
             // Setup event handlers
             PointerMoved += PaintControl_PointerMoved;
             PointerPressed += PaintControl_PointerPressed;
@@ -70,6 +72,7 @@ namespace HexagonPainting.Controls
                     _mainLayer.Draw();
                     InvalidateVisual();
                 }
+
                 e.Handled = true;
             }
         }
@@ -102,6 +105,7 @@ namespace HexagonPainting.Controls
                 }
             }
         }
+
         public void DrawHexes(IEnumerable<Hex> hexes)
         {
             if (Vm == null)
@@ -111,7 +115,7 @@ namespace HexagonPainting.Controls
             // Request the updated image be rendered
             InvalidateVisual();
         }
-        
+
 
         private void PaintControl_PointerCaptureLost(object? sender, PointerCaptureLostEventArgs e)
         {
@@ -166,6 +170,8 @@ namespace HexagonPainting.Controls
                         break;
                 }
             }
+
+            _color.Value = Color.FromRgb(Vm.Red, Vm.Green, Vm.Blue);
         }
 
         private void PaintControl_KeyUp(object? sender, KeyEventArgs e)
@@ -192,6 +198,7 @@ namespace HexagonPainting.Controls
                         break;
                 }
             }
+            _color.Value = Color.FromRgb(Vm.Red, Vm.Green, Vm.Blue);
         }
 
 
@@ -202,7 +209,6 @@ namespace HexagonPainting.Controls
         public override void Render(DrawingContext context)
         {
             DrawMainLayer();
-
             // If there is an image in the view model, copy it to the PaintControl's drawing surface
             if (Vm?.Image != null)
             {
@@ -216,7 +222,8 @@ namespace HexagonPainting.Controls
             {
                 var pen = new Pen(new SolidColorBrush(Color.FromRgb(Vm.Red, Vm.Green, Vm.Blue)));
                 byte altColor = (byte)(255 - Vm.Green);
-                pen = new Pen(new SolidColorBrush(Color.FromRgb(altColor, altColor, altColor)), dashStyle: DashStyle.Dash);
+                pen = new Pen(new SolidColorBrush(Color.FromRgb(altColor, altColor, altColor)),
+                    dashStyle: DashStyle.Dash);
             }
         }
 
@@ -225,7 +232,8 @@ namespace HexagonPainting.Controls
             var hexes = _mainLayer.Select(it => new Hex()
             {
                 Coordinates = new Point(300, 300) + new Point(it.Position.X, it.Position.Y) * 10,
-                Scale = 10f
+                Scale = 10f,
+                Color = new Color(it.Color.R, it.Color.G, it.Color.B, it.Color.A)
             });
             Vm.AddHex(hexes);
         }
