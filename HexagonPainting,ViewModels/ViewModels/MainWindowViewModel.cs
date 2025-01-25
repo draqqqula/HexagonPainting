@@ -19,17 +19,6 @@ namespace HexagonPainting.ViewModels
             }
         }
 
-        // A text rendering of the current marquee dimensions
-        public string Rect
-        {
-            get => _rect;
-            set
-            {
-                _rect = value;
-                OnPropertyChanged(nameof(Rect));
-            }
-        }
-
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string name)
         {
@@ -66,7 +55,6 @@ namespace HexagonPainting.ViewModels
                     {
                         // Update the text for Position and Marquee
                         SetPos();
-                        SetRect();
                         break;
                     }
 
@@ -76,32 +64,12 @@ namespace HexagonPainting.ViewModels
                         SetPos();
                         break;
                     }
-
-                case nameof(PaintControlViewModel.Marquee):
-                    {
-                        // Update the text for the Marquee
-                        SetRect();
-                        break;
-                    }
-
             }
         }
 
         private void SetPos()
         {
             MousePosition = $"{Vm?.Pos.X} {Vm?.Pos.Y}";
-        }
-
-        private void SetRect()
-        {
-            if (Vm?.Dragging == true)
-            {
-                Rect = $"{Vm.Marquee.Left} {Vm.Marquee.Top}  {Vm.Marquee.Width} {Vm.Marquee.Height}";
-            }
-            else
-            {
-                Rect = string.Empty;
-            }
         }
     }
 }

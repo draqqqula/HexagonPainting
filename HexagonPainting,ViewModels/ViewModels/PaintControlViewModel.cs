@@ -46,34 +46,6 @@ namespace HexagonPainting.ViewModels
             }
         }
 
-        // The mouse position at the start of the drag operation
-        public Point Origin
-        {
-            get => _origin;
-            set
-            {
-                if (_origin != value)
-                {
-                    _origin = value;
-                    OnPropertyChanged(nameof(Origin));
-                }
-            }
-        }
-
-        // The drag rectangle
-        public Rect Marquee
-        {
-            get => _marquee;
-            set
-            {
-                if (_marquee != value)
-                {
-                    _marquee = value;
-                    OnPropertyChanged(nameof(Marquee));
-                }
-            }
-        }
-
         // The color for the rectangle to be drawn
         // This can be controlled by pressing Shift, Ctrl and Alt keys
         public byte Red { get; set; } = 0;

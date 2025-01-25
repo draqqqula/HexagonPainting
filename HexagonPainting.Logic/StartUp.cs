@@ -12,6 +12,7 @@ using HexagonPainting.Logic.Drawing.Api;
 using HexagonPainting.Core.Common.Models;
 using HexagonPainting.Logic.Map.Maps;
 using System.Collections;
+using HexagonPainting.Logic.Drawing.Interfaces;
 
 namespace HexagonPainting.Logic;
 
@@ -34,6 +35,8 @@ public static class StartUp
 
     public static void AddCommonDefaults(this IServiceCollection services)
     {
+        services.AddSingleton<Pointer>();
+        services.AddSingleton<IPointer>(provider => provider.GetRequiredService<Pointer>());
         services.AddSingleton<IGrid>(provider => new HexagonGridPointyTop(1f));
     }
 

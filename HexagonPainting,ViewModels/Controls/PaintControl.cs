@@ -8,15 +8,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HexagonPainting.ViewModels;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using HexagonPainting.Logic.Drawing.Api;
+using Pointer = HexagonPainting.Logic.Drawing.Api.Pointer;
+using Microsoft.Extensions.DependencyInjection;
+using HexagonPainting_ViewModels;
 
 namespace HexagonPainting.Controls
 {
     public class PaintControl : Control
     {
+        private Pointer _pointer;
+        private Layer<Color> _mainLayer;
+
         public PaintControlViewModel? Vm => DataContext as PaintControlViewModel;
 
         public PaintControl()
         {
+            _pointer = Services.Default.GetRequiredService<Pointer>();
+            _mainLayer = Services.Default.GetRequiredKeyedService<Layer<Color>>("main");
+
             // Setup event handlers
             PointerMoved += PaintControl_PointerMoved;
             PointerPressed += PaintControl_PointerPressed;
@@ -44,23 +55,17 @@ namespace HexagonPainting.Controls
 
         private void PaintControl_PointerMoved(object? sender, PointerEventArgs e)
         {
+            var pos = e.GetPosition(this);
+
+            _pointer.Position = new System.Numerics.Vector2((float)pos.X, (float)pos.Y);
+
             if (Vm != null)
             {
-                // Update the mouse position, and the currently selected marquee
-                var pos = e.GetPosition(this);
                 Vm.Pos = pos;
                 if (Vm.Dragging)
                 {
-                    Vm.Marquee = new Rect(
-                        Math.Min(Vm.Origin.X, Vm.Pos.X),
-                        Math.Min(Vm.Origin.Y, Vm.Pos.Y),
-                        Math.Abs(Vm.Origin.X - Vm.Pos.X),
-                        Math.Abs(Vm.Origin.Y - Vm.Pos.Y));
+                    _mainLayer.Draw();
                     InvalidateVisual();
-                }
-                else
-                {
-                    Vm.Origin = pos;
                 }
                 e.Handled = true;
             }
@@ -68,6 +73,8 @@ namespace HexagonPainting.Controls
 
         private void PaintControl_PointerPressed(object? sender, PointerPressedEventArgs e)
         {
+            _mainLayer.Draw();
+
             if (Vm != null)
             {
                 // Start the drag
@@ -193,10 +200,8 @@ namespace HexagonPainting.Controls
             if (Vm?.Dragging == true)
             {
                 var pen = new Pen(new SolidColorBrush(Color.FromRgb(Vm.Red, Vm.Green, Vm.Blue)));
-                context.DrawRectangle(pen, Vm.Marquee.Translate(new Vector(0.5, 0.5)));
                 byte altColor = (byte)(255 - Vm.Green);
                 pen = new Pen(new SolidColorBrush(Color.FromRgb(altColor, altColor, altColor)), dashStyle: DashStyle.Dash);
-                context.DrawRectangle(pen, Vm.Marquee.Translate(new Vector(0.5, 0.5)));
             }
         }
 
