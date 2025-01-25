@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HexagonPainting_ViewModels;
+namespace HexagonPainting_ViewModels.Services;
 
 public static class Services
 {
