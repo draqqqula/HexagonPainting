@@ -144,6 +144,25 @@ namespace HexagonPainting.Controls
                 InvalidateVisual();
             }
         }
+        public void SaveMapToFile()
+        {
+            var path = Path.Combine(Environment.CurrentDirectory, "map.bin");
+            using (var fileStream = new FileStream(path, FileMode.Create, FileAccess.Write))
+            using (var writer = new BinaryWriter(fileStream))
+            {
+                _mainLayer.Map.Serialize(writer);
+            }
+        }
+        public void LoadMapFromFile()
+        {
+            var path = Path.Combine(Environment.CurrentDirectory, "map.bin");
+            using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read))
+            using (var reader = new BinaryReader(fileStream))
+            {
+                _mainLayer.Map.Deserialize(reader);
+            }
+            InvalidateVisual();
+        }
 
         private void PaintControl_KeyDown(object? sender, KeyEventArgs e)
         {
@@ -162,7 +181,12 @@ namespace HexagonPainting.Controls
                         Vm.Green = 255;
                         InvalidateVisual();
                         break;
-
+                    case Key.O:
+                        SaveMapToFile();
+                        break;
+                    case Key.I:
+                        LoadMapFromFile();
+                        break;
                     case Key.LeftAlt:
                         Vm.Blue = 255;
                         InvalidateVisual();
