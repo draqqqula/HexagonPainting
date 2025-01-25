@@ -28,6 +28,7 @@ public class Layer<TColor> : IEnumerable<Tile<TColor>>
         _visitor = new TranslatePositionVisitor();
     }
 
+    public event Action OnMapStateChanged;
     public IHexagonMap<TColor> Map { get; private set; }
 
     public IEnumerator<Tile<TColor>> GetEnumerator()
@@ -52,5 +53,6 @@ public class Layer<TColor> : IEnumerable<Tile<TColor>>
     public void Draw()
     {
         DrawingHelper.Draw(Map, _brush.Value);
+        OnMapStateChanged?.Invoke();
     }
 }
