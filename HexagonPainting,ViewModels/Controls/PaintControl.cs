@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using HexagonPainting_ViewModels;
 using HexagonPainting_ViewModels.Services;
 using HexagonPainting.Logic.Common;
+using System.Numerics;
 
 namespace HexagonPainting.Controls
 {
@@ -23,6 +24,8 @@ namespace HexagonPainting.Controls
         private Pointer _pointer;
         private Layer<Color> _mainLayer;
         private Selected<Color> _color;
+        private Point _offset = new Point(0, 0);
+        private float _scale = 10f;
 
         public PaintControlViewModel? Vm => DataContext as PaintControlViewModel;
 
@@ -63,7 +66,7 @@ namespace HexagonPainting.Controls
         {
             var pos = e.GetPosition(this);
 
-            _pointer.Position = new System.Numerics.Vector2((float)pos.X, (float)pos.Y);
+            _pointer.Position = new System.Numerics.Vector2((float)pos.X, (float)pos.Y) / _scale;
 
             if (Vm != null)
             {
@@ -222,9 +225,6 @@ namespace HexagonPainting.Controls
             if (Vm?.Dragging == true)
             {
                 var pen = new Pen(new SolidColorBrush(Color.FromRgb(Vm.Red, Vm.Green, Vm.Blue)));
-                byte altColor = (byte)(255 - Vm.Green);
-                pen = new Pen(new SolidColorBrush(Color.FromRgb(altColor, altColor, altColor)),
-                    dashStyle: DashStyle.Dash);
             }
         }
 
@@ -232,9 +232,9 @@ namespace HexagonPainting.Controls
         {
             var hexes = _mainLayer.Select(it => new Hex()
             {
-                Coordinates = new Point(300, 300) + new Point(it.Position.X, it.Position.Y) * 10,
-                Scale = 10f,
-                Color = new Color(it.Color.R, it.Color.G, it.Color.B, it.Color.A)
+                Coordinates = _offset + new Point(it.Position.X, it.Position.Y) * (_scale * (Math.Sqrt(3) * 0.5f)),
+                Scale = _scale,
+                Color = it.Color
             });
             Vm.AddHex(hexes);
         }
