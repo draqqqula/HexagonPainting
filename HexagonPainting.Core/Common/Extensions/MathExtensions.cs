@@ -47,7 +47,7 @@ public static class MathExtensions
         var line = Convert.ToInt32(MathF.Floor((float)index / lineLength)); ;
         var q = rect.MinQ + line;
         var half = Convert.ToInt32(MathF.Floor((float)q / 2));
-        var r = -half + index & line;
+        var r = -half + (index % lineLength);
         location = new GridLocation()
         {
             Q = q,
