@@ -99,3 +99,19 @@ public class RectangleShapedHexagonMap<TColor> : IHexagonMap<TColor>
         return GetEnumerator();
     }
 }
+
+public class RectangleShapedHexagonMapFactory<TColor>
+{
+    private readonly IBinarySerializer<TColor> _serializer;
+    private readonly IBinaryDeserializer<TColor> _deserializer;
+    public RectangleShapedHexagonMapFactory(IBinarySerializer<TColor> serializer, IBinaryDeserializer<TColor> deserializer)
+    {
+        _serializer = serializer;
+        _deserializer = deserializer;
+    }
+
+    public RectangleShapedHexagonMap<TColor> FromRect(RectRegion rect)
+    {
+        return new RectangleShapedHexagonMap<TColor>(rect, _serializer, _deserializer);
+    }
+}

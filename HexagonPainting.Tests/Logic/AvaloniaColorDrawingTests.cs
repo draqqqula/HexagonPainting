@@ -14,6 +14,7 @@ using Avalonia;
 using Avalonia.Media;
 using HexagonPainting.Core.Common.Interfaces;
 using HexagonPainting.Logic.Map.Maps;
+using HexagonPainting.Core.Map.Interfaces;
 
 namespace HexagonPainting.Tests.Logic;
 
@@ -53,15 +54,21 @@ public class AvaloniaColorDrawingTests
 
         services.AddSingleton(_pointer);
 
+        services.AddSingleton<IBinarySerializer<Color>, ColorSerializer>();
+        services.AddSingleton<IBinaryDeserializer<Color>, ColorDeserializer>();
+        services.AddRectangleMapFactory<Color>();
+
         services.AddLogic();
         services.AddBrushesFor<Color>();
-        services.AddServicesFor<Color>(Colors.White, new RectangleShapedHexagonMap<Color>(new RectRegion()
-        {
-            MinQ = -16,
-            MinR = -16,
-            MaxQ = 16,
-            MaxR = 16
-        }, new ColorSerializer(), new ColorDeserializer()));
+        services.AddSingleton<IHexagonMap<Color>>(
+            provider => provider.GetRequiredService<RectangleShapedHexagonMapFactory<Color>>().FromRect(new RectRegion()
+            {
+                MinQ = -16,
+                MinR = -16,
+                MaxQ = 16,
+                MaxR = 16
+            }));
+        services.AddServicesFor(Colors.White);
 
         _provider = factory.CreateServiceProvider(services);
 

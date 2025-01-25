@@ -22,15 +22,14 @@ public static class StartUp
         services.AddCommonDefaults();
 
         services.AddBrushesFor<BitColor>();
-        services.AddServicesFor<BitColor>(
-            BitColor.True, 
-            new RectangleShapedHexagonBitMap(new RectRegion()
-            {
-                MinQ = -16,
-                MinR = -16,
-                MaxQ = 16,
-                MaxR = 16
-            }));
+        services.AddTransient<IHexagonMap<BitColor>>(provider => new RectangleShapedHexagonBitMap(new RectRegion()
+        {
+            MinQ = -16,
+            MinR = -16,
+            MaxQ = 16,
+            MaxR = 16
+        }));
+        services.AddServicesFor(BitColor.True);
     }
 
     public static void AddCommonDefaults(this IServiceCollection services)
@@ -49,9 +48,8 @@ public static class StartUp
     }
 
     public static void AddServicesFor<TColor>(this IServiceCollection services, 
-        TColor defaultColor, IHexagonMap<TColor> defaultMap)
+        TColor defaultColor)
     {
-        services.AddSingleton<IHexagonMap<TColor>>(defaultMap);
         services.AddSingleton<Selected<TColor>>(new Selected<TColor>(defaultColor));
         services.AddSingleton<Selected<IBrush<TColor>>>();
         services.AddSingleton<ISelectedValueProvider<TColor>>(it => it.GetRequiredService<Selected<TColor>>());
@@ -59,5 +57,10 @@ public static class StartUp
         services.AddTransient<Layer<TColor>>();
         services.AddKeyedSingleton<Layer<TColor>>("main");
         services.AddKeyedSingleton<Layer<TColor>>("preview");
+    }
+
+    public static void AddRectangleMapFactory<TColor>(this IServiceCollection services)
+    {
+        services.AddSingleton<RectangleShapedHexagonMapFactory<TColor>>();
     }
 }
