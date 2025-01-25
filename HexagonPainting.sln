@@ -5,15 +5,13 @@ VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HexagonPainting.App", "HexagonPainting\HexagonPainting.App.csproj", "{87D70C00-55C9-4031-BF74-77D8D5BE2829}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HexagonPainting.UI", "HexagonPainting.UI\HexagonPainting.UI.csproj", "{38BCBF38-38A3-4D89-AA29-67F336DE7420}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HexagonPainting,ViewModels", "HexagonPainting,ViewModels\HexagonPainting,ViewModels.csproj", "{60F3C220-440D-4315-9B8C-5BFE0C5CDA76}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HexagonPainting.Logic", "HexagonPainting.Logic\HexagonPainting.Logic.csproj", "{65C8AC03-F457-47A4-90BE-C03586DD5334}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HexagonPainting.Core", "HexagonPainting.Core\HexagonPainting.Core.csproj", "{A42EAACE-DBE3-4250-89C4-734F9E6A0DFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexagonPainting.Tests", "HexagonPainting.Tests\HexagonPainting.Tests.csproj", "{0BD1C733-73B0-461C-8844-C47B27A6271B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HexagonPainting.Tests", "HexagonPainting.Tests\HexagonPainting.Tests.csproj", "{0BD1C733-73B0-461C-8844-C47B27A6271B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +23,6 @@ Global
 		{87D70C00-55C9-4031-BF74-77D8D5BE2829}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87D70C00-55C9-4031-BF74-77D8D5BE2829}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87D70C00-55C9-4031-BF74-77D8D5BE2829}.Release|Any CPU.Build.0 = Release|Any CPU
-		{38BCBF38-38A3-4D89-AA29-67F336DE7420}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{38BCBF38-38A3-4D89-AA29-67F336DE7420}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{38BCBF38-38A3-4D89-AA29-67F336DE7420}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{38BCBF38-38A3-4D89-AA29-67F336DE7420}.Release|Any CPU.Build.0 = Release|Any CPU
 		{60F3C220-440D-4315-9B8C-5BFE0C5CDA76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{60F3C220-440D-4315-9B8C-5BFE0C5CDA76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60F3C220-440D-4315-9B8C-5BFE0C5CDA76}.Release|Any CPU.ActiveCfg = Release|Any CPU

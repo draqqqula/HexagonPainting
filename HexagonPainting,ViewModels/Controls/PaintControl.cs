@@ -16,6 +16,9 @@ using HexagonPainting_ViewModels;
 using HexagonPainting_ViewModels.Services;
 using HexagonPainting.Logic.Common;
 using System.Numerics;
+using HexagonPainting.Logic.Drawing.Brushes;
+using HexagonPainting.Core.Drawing.Interfaces;
+using HexagonPainting.Logic.Map.Maps;
 
 namespace HexagonPainting.Controls
 {
@@ -23,9 +26,14 @@ namespace HexagonPainting.Controls
     {
         private Pointer _pointer;
         private Layer<Color> _mainLayer;
+        private Layer<Color> _previewLayer;
         private Selected<Color> _color;
-        private Point _offset = new Point(0, 0);
+        private Point _offset = new Point(400, 300);
         private float _scale = 10f;
+        private CircleBrush<Color> _circleBrush;
+        private RectangleBrush<Color> _rectangleBrush;
+        private PointBrush<Color> _pointBrush;
+        private Selected<IBrush<Color>> _selectedBrush;
 
         public PaintControlViewModel? Vm => DataContext as PaintControlViewModel;
 
@@ -33,7 +41,12 @@ namespace HexagonPainting.Controls
         {
             _pointer = Services.Default.GetRequiredService<Pointer>();
             _mainLayer = Services.Default.GetRequiredKeyedService<Layer<Color>>("main");
+            _previewLayer = Services.Default.GetRequiredKeyedService<Layer<Color>>("preview");
             _color = Services.Default.GetRequiredService<Selected<Color>>();
+            _selectedBrush = Services.Default.GetRequiredService<Selected<IBrush<Color>>>();
+            _circleBrush = Services.Default.GetRequiredService<CircleBrush<Color>>();
+            _rectangleBrush = Services.Default.GetRequiredService<RectangleBrush<Color>>();
+            _pointBrush = Services.Default.GetRequiredService<PointBrush<Color>>();
             // Setup event handlers
             PointerMoved += PaintControl_PointerMoved;
             PointerPressed += PaintControl_PointerPressed;
@@ -43,8 +56,8 @@ namespace HexagonPainting.Controls
 
             KeyDownEvent.AddClassHandler<TopLevel>(PaintControl_KeyDown, handledEventsToo: true);
             KeyUpEvent.AddClassHandler<TopLevel>(PaintControl_KeyUp, handledEventsToo: true);
-
             _mainLayer.OnMapStateChanged += InvalidateVisual;
+            _previewLayer.OnMapStateChanged += InvalidateVisual;
             _color.Value = Colors.Black;
         }
 
@@ -66,7 +79,8 @@ namespace HexagonPainting.Controls
         {
             var pos = e.GetPosition(this);
 
-            _pointer.Position = new System.Numerics.Vector2((float)pos.X, (float)pos.Y) / _scale;
+            _pointer.Position = (new Vector2((float)pos.X, (float)pos.Y)
+                - new Vector2((float)_offset.X, (float)_offset.Y)) / (_scale * (MathF.Sqrt(3) * 0.5f));
 
             if (Vm != null)
             {
@@ -79,11 +93,18 @@ namespace HexagonPainting.Controls
 
                 e.Handled = true;
             }
+
+            using var stream = new MemoryStream();
+            using var writer = new BinaryWriter(stream);
+            _mainLayer.Map.Serialize(writer);
+            stream.Position = 0;
+            using var reader = new BinaryReader(stream);
+            _previewLayer.Map.Deserialize(reader);
+            _previewLayer.Draw();
         }
 
         private void PaintControl_PointerPressed(object? sender, PointerPressedEventArgs e)
         {
-            _mainLayer.Draw();
 
             if (Vm != null)
             {
@@ -168,6 +189,51 @@ namespace HexagonPainting.Controls
                         InvalidateVisual();
                         break;
 
+                    case Key.Q:
+                        _scale *= 0.99f;
+                        InvalidateVisual();
+                        break;
+
+                    case Key.E:
+                        _scale *= 1.01f;
+                        InvalidateVisual();
+                        break;
+
+                    case Key.A:
+                        _selectedBrush.Value = _circleBrush;
+                        InvalidateVisual();
+                        break;
+
+                    case Key.S:
+                        _selectedBrush.Value = _rectangleBrush;
+                        InvalidateVisual();
+                        break;
+
+                    case Key.D:
+                        _selectedBrush.Value = _pointBrush;
+                        InvalidateVisual();
+                        break;
+
+                    case Key.R:
+                        _circleBrush.Radius *= 0.99f;
+                        InvalidateVisual();
+                        break;
+
+                    case Key.T:
+                        _circleBrush.Radius *= 1.01f;
+                        InvalidateVisual();
+                        break;
+
+                    case Key.F:
+                        _rectangleBrush.Size *= 1.01f;
+                        InvalidateVisual();
+                        break;
+
+                    case Key.G:
+                        _rectangleBrush.Size *= 1.01f;
+                        InvalidateVisual();
+                        break;
+
                     case Key.Escape:
                         Vm.Dragging = false;
                         InvalidateVisual();
@@ -212,7 +278,8 @@ namespace HexagonPainting.Controls
         /// <param name="context"></param>
         public override void Render(DrawingContext context)
         {
-            DrawMainLayer();
+            DrawLayer(_mainLayer);
+            DrawLayer(_previewLayer);
             // If there is an image in the view model, copy it to the PaintControl's drawing surface
             if (Vm?.Image != null)
             {
@@ -228,9 +295,9 @@ namespace HexagonPainting.Controls
             }
         }
 
-        public void DrawMainLayer()
+        public void DrawLayer(Layer<Color> layer)
         {
-            var hexes = _mainLayer.Select(it => new Hex()
+            var hexes = layer.Select(it => new Hex()
             {
                 Coordinates = _offset + new Point(it.Position.X, it.Position.Y) * (_scale * (Math.Sqrt(3) * 0.5f)),
                 Scale = _scale,

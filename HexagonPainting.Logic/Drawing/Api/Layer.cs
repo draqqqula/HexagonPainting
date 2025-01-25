@@ -29,7 +29,7 @@ public class Layer<TColor> : IEnumerable<Tile<TColor>>
     }
 
     public event Action OnMapStateChanged;
-    public IHexagonMap<TColor> Map { get; private set; }
+    public IHexagonMap<TColor> Map { get; set; }
 
     public IEnumerator<Tile<TColor>> GetEnumerator()
     {

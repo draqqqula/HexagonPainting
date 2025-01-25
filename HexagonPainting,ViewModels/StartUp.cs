@@ -38,7 +38,7 @@ public static class StartUp
 
         services.AddLogic();
         services.AddBrushesFor<Color>();
-        services.AddSingleton<IHexagonMap<Color>>(
+        services.AddTransient<IHexagonMap<Color>>(
             provider => provider.GetRequiredService<RectangleShapedHexagonMapFactory<Color>>().FromRect(new RectRegion()
             {
                 MinQ = -16,
