@@ -214,7 +214,5 @@ namespace HexagonPainting.Controls
                 pen = new Pen(new SolidColorBrush(Color.FromRgb(altColor, altColor, altColor)), dashStyle: DashStyle.Dash);
             }
         }
-
-
     }
 }

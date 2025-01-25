@@ -22,8 +22,6 @@
 		<StackPanel Grid.Row="2" Orientation="Horizontal">
 			<TextBlock Width="50" Text="Cursor:"/>
 			<TextBlock Width="120" Text="{Binding MousePosition}"/>
-			<TextBlock Width="70" Text="Rectangle:"/>
-			<TextBlock Width="100" Text="{Binding Rect}"/>
 		</StackPanel>
 	</Grid>
 </Window>
