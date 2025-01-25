@@ -41,10 +41,10 @@ public static class StartUp
         services.AddTransient<IHexagonMap<Color>>(
             provider => provider.GetRequiredService<RectangleShapedHexagonMapFactory<Color>>().FromRect(new RectRegion()
             {
-                MinQ = -16,
-                MinR = -16,
-                MaxQ = 16,
-                MaxR = 16
+                MinQ = -32,
+                MinR = -32,
+                MaxQ = 32,
+                MaxR = 32
             }, Colors.SkyBlue));
         services.AddServicesFor(Colors.White);
     }
