@@ -67,7 +67,7 @@ public class AvaloniaColorDrawingTests
                 MinR = -16,
                 MaxQ = 16,
                 MaxR = 16
-            }));
+            }, Colors.SkyBlue));
         services.AddServicesFor(Colors.White);
 
         _provider = factory.CreateServiceProvider(services);

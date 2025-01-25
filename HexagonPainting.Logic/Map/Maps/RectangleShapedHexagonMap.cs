@@ -20,7 +20,7 @@ public class RectangleShapedHexagonMap<TColor> : IHexagonMap<TColor>
     private IBinarySerializer<TColor> _serializer;
     private IBinaryDeserializer<TColor> _deserializer;
 
-    public RectangleShapedHexagonMap(RectRegion rect, 
+    public RectangleShapedHexagonMap(RectRegion rect, TColor defaultColor,
         IBinarySerializer<TColor> serializer, 
         IBinaryDeserializer<TColor> deserializer)
     {
@@ -28,6 +28,10 @@ public class RectangleShapedHexagonMap<TColor> : IHexagonMap<TColor>
         _deserializer = deserializer;
         _rect = rect;
         _data = new TColor[rect.Area];
+        for (int i = 0; i < rect.Area; i++)
+        {
+            _data[i] = defaultColor;
+        }
     }
 
     public TColor this[GridLocation position]
@@ -110,8 +114,8 @@ public class RectangleShapedHexagonMapFactory<TColor>
         _deserializer = deserializer;
     }
 
-    public RectangleShapedHexagonMap<TColor> FromRect(RectRegion rect)
+    public RectangleShapedHexagonMap<TColor> FromRect(RectRegion rect, TColor defaultColor)
     {
-        return new RectangleShapedHexagonMap<TColor>(rect, _serializer, _deserializer);
+        return new RectangleShapedHexagonMap<TColor>(rect, defaultColor, _serializer, _deserializer);
     }
 }

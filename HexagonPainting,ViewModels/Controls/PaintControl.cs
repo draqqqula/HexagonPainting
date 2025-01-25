@@ -42,6 +42,7 @@ namespace HexagonPainting.Controls
             KeyUpEvent.AddClassHandler<TopLevel>(PaintControl_KeyUp, handledEventsToo: true);
 
             _mainLayer.OnMapStateChanged += InvalidateVisual;
+            _color.Value = Colors.Black;
         }
 
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
